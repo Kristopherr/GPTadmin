@@ -1,4 +1,4 @@
-#reqired pip packages: crontab netifaces nmap 
+#reqired pip packages: crontab netifaces nmap cryptography
 import os
 import sys
 import subprocess
