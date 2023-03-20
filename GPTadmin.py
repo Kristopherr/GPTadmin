@@ -14,8 +14,7 @@ from crontab import CronTab
 openai.api_key = "your_api_key"
 
 # function to interact with GPT-4
-def ask_gpt(prompt, context):
-    prompt += "\n"
+def ask_gpt(prompt):
     response = openai.Completion.create(
         engine="text-davinci-003",
         prompt=prompt,
@@ -25,8 +24,9 @@ def ask_gpt(prompt, context):
         temperature=0.5,
         presence_penalty=0.5,
         frequency_penalty=0.5,
-        context=context,
     )
+
+    return response.choices[0].text.strip()
 
     return response.choices[0].text.strip()
 
@@ -200,9 +200,8 @@ def main():
 
     elif command == "generate text":
         prompt = input("Enter prompt: ")
-        context = input("Enter context: ")
-        result = ask_gpt(prompt, context)
-        print(result)    
+        result = ask_gpt(prompt)
+        print(result)  
         
     elif command == "help":
         print("Available commands:")
