@@ -16,7 +16,7 @@ openai.api_key = "your_api_key"
 # function to interact with GPT-4
 def ask_gpt(prompt):
     response = openai.Completion.create(
-        engine="text-davinci-003",
+        engine="gpt-4-32k-0314",
         prompt=prompt,
         max_tokens=1024,
         n=1,
