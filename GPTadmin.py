@@ -198,8 +198,15 @@ def main():
     	except AttributeError:
             print("Invalid command format. Use: automate tasks [action] [task] [schedule]")
 
+    elif command == "generate text":
+        prompt = input("Enter prompt: ")
+        context = input("Enter context: ")
+        result = ask_gpt(prompt, context)
+        print(result)    
+        
     elif command == "help":
         print("Available commands:")
+        print("- generate text")
         print("- current status: Display the current system information")
         print("- scan network: Scan the local network for devices")
         print("- update system: Update the system to the latest version of Linux")
