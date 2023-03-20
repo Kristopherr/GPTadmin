@@ -11,8 +11,68 @@ import psutil
 import ipaddress
 import platform
 from crontab import CronTab
+from cryptography.fernet import Fernet
+from getpass import getpass
 
-openai.api_key = "your_api_key"
+KEY_FILE = "api_key.key"
+API_KEY_FILE = "api_key.enc"
+
+def generate_key():
+    key = Fernet.generate_key()
+    with open(KEY_FILE, "wb") as key_file:
+        key_file.write(key)
+    return key
+
+def load_key():
+    try:
+        with open(KEY_FILE, "rb") as key_file:
+            key = key_file.read()
+    except FileNotFoundError:
+        key = generate_key()
+    return key
+
+def encrypt_api_key(api_key, key):
+    f = Fernet(key)
+    encrypted_api_key = f.encrypt(api_key.encode())
+    with open(API_KEY_FILE, "wb") as api_key_file:
+        api_key_file.write(encrypted_api_key)
+
+def decrypt_api_key(key):
+    try:
+        with open(API_KEY_FILE, "rb") as api_key_file:
+            encrypted_api_key = api_key_file.read()
+        f = Fernet(key)
+        decrypted_api_key = f.decrypt(encrypted_api_key).decode()
+    except FileNotFoundError:
+        decrypted_api_key = None
+    return decrypted_api_key
+
+def add_api_key():
+    api_key = getpass("Enter your OpenAI API key: ")
+    encrypt_api_key(api_key, load_key())
+    openai.api_key = api_key
+
+def update_api_key():
+    add_api_key()
+
+def remove_api_key():
+    try:
+        os.remove(API_KEY_FILE)
+    except FileNotFoundError:
+        print("API key file not found.")
+    openai.api_key = None
+
+def manage_api_key(action):
+    if action == "add":
+        add_api_key()
+    elif action == "update":
+        update_api_key()
+    elif action == "remove":
+        remove_api_key()
+    else:
+        print("Invalid action. Please use add, update, or remove.")
+
+openai.api_key = decrypt_api_key(load_key())
 
 # function to interact with GPT-4
 def ask_gpt(prompt):
@@ -148,6 +208,13 @@ def main():
         return
 
     command = sys.argv[1]
+
+    if command.startswith("api_key"):
+        try:
+            _, action = command.split(" ", 1)
+            manage_api_key(action)
+        except ValueError:
+            print("Invalid command format. Use: api_key [add/update/remove]")
 
     if command == "current status":
         system_info = get_system_info()
