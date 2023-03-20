@@ -31,7 +31,17 @@ def ask_gpt(prompt, context):
     return response.choices[0].text.strip()
 
 def automate_tasks(action, task, schedule):
-    if action not in ["add", "remove"]:
+    if not action:
+        # show current cron jobs
+        cron = CronTab(user=True)
+        jobs = []
+        for job in cron:
+            jobs.append(str(job))
+        if jobs:
+            return "\n".join(jobs)
+        else:
+            return "No cron jobs found."
+    elif action not in ["add", "remove"]:
         return "Invalid action. Please use add or remove."
 
     cron = CronTab(user=True)
