@@ -30,7 +30,7 @@ def ask_gpt(prompt, context):
 
     return response.choices[0].text.strip()
 
-def automate_tasks(action, task, schedule):
+def automate_tasks(action=None, task=None, schedule=None):
     if not action:
         # show current cron jobs
         cron = CronTab(user=True)
