@@ -203,11 +203,7 @@ def manage_system_services(service, action):
         return result
 
 def main():
-    if len(sys.argv) < 2:
-        print("Please provide a valid command")
-        return
-
-    command = sys.argv[1]
+    command = input("Enter a command: ")
 
     if command.startswith("api_key"):
         try:
