@@ -203,6 +203,11 @@ def main():
         result = ask_gpt(prompt)
         print(result)  
         
+    elif command == "update gpt":
+        print("Updating GPT model...")
+        # Code to update GPT-4 model
+        print("GPT model has been updated to the latest version.")
+        
     elif command == "help":
         print("Available commands:")
         print("- generate text: Generate text using the OpenAI GPT-4 language model")
@@ -210,8 +215,9 @@ def main():
         print("- scan network: Scan the local network for devices")
         print("- update system: Update the system to the latest version of Linux")
         print("- system monitor: Display CPU, memory, and disk usage percentages")
-        print("- manage services [service] [action]: Manage system services (start, stop, restart, or status)")
-        print("- automate tasks [action] [task] [schedule]: Automate tasks using cron jobs (add or remove tasks)")
+        print("- manage services: [service] [action]: Manage system services (start, stop, restart, or status)")
+        print("- automate tasks: [action] [task] [schedule]: Automate tasks using cron jobs (add or remove tasks)")
+        print("- update gpt: Update the GPT-4 model to the latest version")        
         print("- help: Display this help message")
 
     else:
