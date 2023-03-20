@@ -247,7 +247,7 @@ def main():
         # Code to update GPT-4 model
         print("GPT model has been updated to the latest version.")
         
-   elif command == "help":
+    elif command == "help":
         print("Available commands:")
         print("- update api: Add or update the OpenAI API key")
         print("- generate text: Generate text using the OpenAI GPT-4 language model")
