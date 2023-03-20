@@ -28,8 +28,6 @@ def ask_gpt(prompt):
 
     return response.choices[0].text.strip()
 
-    return response.choices[0].text.strip()
-
 def automate_tasks(action=None, task=None, schedule=None):
     if not action and not task and not schedule:
         # show current cron jobs
