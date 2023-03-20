@@ -77,7 +77,7 @@ openai.api_key = decrypt_api_key(load_key())
 # function to interact with GPT-4
 def ask_gpt(prompt):
     response = openai.Completion.create(
-        engine="gpt-4-32k-0314",
+        engine="text-davinci-003",
         prompt=prompt,
         max_tokens=1024,
         n=1,
