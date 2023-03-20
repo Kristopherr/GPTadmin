@@ -205,12 +205,12 @@ def manage_system_services(service, action):
 def main():
     command = input("Enter a command: ")
 
-    if command.startswith("api_key"):
+    if command.startswith("api key"):
         try:
             _, action = command.split(" ", 1)
             manage_api_key(action)
         except ValueError:
-            print("Invalid command format. Use: api_key [add/update/remove]")
+            print("Invalid command format. Use: api key [add/update/remove]")
 
     if command == "current status":
         system_info = get_system_info()
