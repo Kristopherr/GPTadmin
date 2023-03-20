@@ -11,7 +11,6 @@ import psutil
 import ipaddress
 import platform
 from crontab import CronTab
-from cryptography.fernet import Fernet
 from getpass import getpass
 
 KEY_FILE = "api_key.key"
