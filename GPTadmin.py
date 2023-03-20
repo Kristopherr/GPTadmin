@@ -11,7 +11,7 @@ import ipaddress
 import platform
 from crontab import CronTab
 
-openai.api_key = "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"
+openai.api_key = "your_api_key"
 
 # function to interact with GPT-4
 def ask_gpt(prompt, context):
