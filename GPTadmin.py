@@ -206,7 +206,7 @@ def main():
         
     elif command == "help":
         print("Available commands:")
-        print("- generate text")
+        print("- generate text: Generate text using the OpenAI GPT-4 language model")
         print("- current status: Display the current system information")
         print("- scan network: Scan the local network for devices")
         print("- update system: Update the system to the latest version of Linux")
