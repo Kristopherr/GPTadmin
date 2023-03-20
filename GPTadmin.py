@@ -51,26 +51,7 @@ def add_api_key():
     api_key = getpass("Enter your OpenAI API key: ")
     encrypt_api_key(api_key, load_key())
     openai.api_key = api_key
-
-def update_api_key():
-    add_api_key()
-
-def remove_api_key():
-    try:
-        os.remove(API_KEY_FILE)
-    except FileNotFoundError:
-        print("API key file not found.")
-    openai.api_key = None
-
-def manage_api_key(action):
-    if action == "add":
-        add_api_key()
-    elif action == "update":
-        update_api_key()
-    elif action == "remove":
-        remove_api_key()
-    else:
-        print("Invalid action. Please use add, update, or remove.")
+    print(f"API key added successfully: {api_key[:4]}{'*' * (len(api_key) - 8)}{api_key[-4:]}")
 
 openai.api_key = decrypt_api_key(load_key())
 
@@ -205,12 +186,8 @@ def manage_system_services(service, action):
 def main():
     command = input("Enter a command: ")
 
-    if command.startswith("api key"):
-        try:
-            _, action = command.split(" ", 1)
-            manage_api_key(action)
-        except ValueError:
-            print("Invalid command format. Use: api key [add/update/remove]")
+    if command == "update api":
+        add_api_key()
 
     if command == "current status":
         system_info = get_system_info()
@@ -270,8 +247,9 @@ def main():
         # Code to update GPT-4 model
         print("GPT model has been updated to the latest version.")
         
-    elif command == "help":
+   elif command == "help":
         print("Available commands:")
+        print("- update api: Add or update the OpenAI API key")
         print("- generate text: Generate text using the OpenAI GPT-4 language model")
         print("- current status: Display the current system information")
         print("- scan network: Scan the local network for devices")
