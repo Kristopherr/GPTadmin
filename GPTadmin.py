@@ -1,4 +1,3 @@
-#reqired pip packages: crontab netifaces nmap cryptography
 import os
 import sys
 import subprocess
@@ -10,12 +9,22 @@ import netifaces
 import psutil
 import ipaddress
 import platform
+import datetime
 from crontab import CronTab
 from cryptography.fernet import Fernet
 from getpass import getpass
 
 KEY_FILE = "api_key.key"
 API_KEY_FILE = "api_key.enc"
+
+def display_greeting():
+    system_info = get_system_info()
+    local_ips = ", ".join(get_local_ip_address())
+    now = datetime.datetime.now()
+    time_of_day = "morning" if 5 <= now.hour < 12 else "afternoon" if 12 <= now.hour < 18 else "evening"
+    prompt = f"It's a new {time_of_day} and we're ready to start! The system is running on {system_info} with IP addresses {local_ips}. GPT-4, please provide an engaging welcome message for our users:"
+    greeting = ask_gpt(prompt)
+    print("\n" + greeting)
 
 def generate_key():
     key = Fernet.generate_key()
@@ -184,6 +193,7 @@ def manage_system_services(service, action):
         return result
 
 def main():
+    display_greeting()
     while True:
         print("\nGPTadmin > ", end="")
         command = input()
