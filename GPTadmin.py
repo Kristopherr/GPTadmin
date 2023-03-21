@@ -11,6 +11,7 @@ import psutil
 import ipaddress
 import platform
 from crontab import CronTab
+from cryptography.fernet import Fernet
 from getpass import getpass
 
 KEY_FILE = "api_key.key"
@@ -183,84 +184,84 @@ def manage_system_services(service, action):
         return result
 
 def main():
-    command = input("Enter a command: ")
+    while True:
+        print("\nGPTadmin > ", end="")
+        command = input()
 
-    if command == "update api":
-        add_api_key()
+        if command == "update api":
+            add_api_key()
 
-    if command == "current status":
-        system_info = get_system_info()
-        print("The system has been updated to " + system_info)
+        elif command == "current status":
+            system_info = get_system_info()
+            print("The system has been updated to " + system_info)
 
-    elif command == "scan network":
-        devices = scan_network()
-        print("Discovered devices:")
-        for device in devices:
-            print(device)
+        elif command == "scan network":
+            devices = scan_network()
+            print("Discovered devices:")
+            for device in devices:
+                print(device)
 
-    elif command == "update system":
-        print("Updating system...")
-        result = update_system()
-        print(result)
-        print("The system has been updated to the latest version of Linux, Debian GNU/Linux 11 (bullseye) 11, on an x86_64 architecture.")
+        elif command.startswith("manage services"):
+            try:
+                _, service, action = command.split(" ", 2)
+                if service == "services":
+                    _, _, service, action = command.split(" ", 3)
+                result = manage_system_services(service, action)
+                print(result)
+            except ValueError:
+                print("Invalid command format. Use: manage services [service] [action]")
+                print("\nAvailable services and their status:")
+                services = list_services()
+                for service, status in services.items():
+                    print(f"{service}: {status}")
 
-    elif command.startswith("manage services"):
-        try:
-            _, service, action = command.split(" ", 2)
-            if service == "services":
-                _, _, service, action = command.split(" ", 3)
-            result = manage_system_services(service, action)
-            print(result)
-        except ValueError:
-            print("Invalid command format. Use: manage services [service] [action]")
-            print("\nAvailable services and their status:")
-            services = list_services()
-            for service, status in services.items():
-                print(f"{service}: {status}")
-
-    elif command == "system monitor":
+        elif command == "system monitor":
             result = system_monitor()
             print(result)
 
-    elif command == "scan network":
-        devices = scan_network()
-        print("Discovered devices:")
-        for device in devices:
-            print(f"{device['IP']} - {device['Hostname']}")
+        elif command == "scan network":
+            devices = scan_network()
+            print("Discovered devices:")
+            for device in devices:
+                print(f"{device['IP']} - {device['Hostname']}")
 
-    elif command.startswith("automate tasks"):
-    	try:
-            action, task, schedule = re.match(r"automate tasks (\w+) '([^']+)' '([^']+)'", command).groups()
-            result = automate_tasks(action, task, schedule)
+        elif command.startswith("automate tasks"):
+            try:
+                action, task, schedule = re.match(r"automate tasks (\w+) '([^']+)' '([^']+)'", command).groups()
+                result = automate_tasks(action, task, schedule)
+                print(result)
+            except AttributeError:
+                print("Invalid command format. Use: automate tasks [action] [task] [schedule]")
+
+        elif command == "generate text":
+            prompt = input("Enter prompt: ")
+            result = ask_gpt(prompt)
             print(result)
-    	except AttributeError:
-            print("Invalid command format. Use: automate tasks [action] [task] [schedule]")
 
-    elif command == "generate text":
-        prompt = input("Enter prompt: ")
-        result = ask_gpt(prompt)
-        print(result)  
-        
-    elif command == "update gpt":
-        print("Updating GPT model...")
-        # Code to update GPT-4 model
-        print("GPT model has been updated to the latest version.")
-        
-    elif command == "help":
-        print("Available commands:")
-        print("- update api: Add or update the OpenAI API key")
-        print("- generate text: Generate text using the OpenAI GPT-4 language model")
-        print("- current status: Display the current system information")
-        print("- scan network: Scan the local network for devices")
-        print("- update system: Update the system to the latest version of Linux")
-        print("- system monitor: Display CPU, memory, and disk usage percentages")
-        print("- manage services: [service] [action]: Manage system services (start, stop, restart, or status)")
-        print("- automate tasks: [action] [task] [schedule]: Automate tasks using cron jobs (add or remove tasks)")
-        print("- update gpt: Update the GPT-4 model to the latest version")        
-        print("- help: Display this help message")
+        elif command == "update gpt":
+            print("Updating GPT model...")
+            # Code to update GPT-4 model
+            print("GPT model has been updated to the latest version.")
 
-    else:
-        print("Please provide a valid command")
+        elif command == "help":
+            print("Available commands:")
+            print("- automate tasks: [action] [task] [schedule]: Automate tasks using cron jobs (add or remove tasks)")
+            print("- current status: Display the current system information")
+            print("- generate text: Generate text using the OpenAI GPT-4 language model")
+            print("- help: Display this help message")
+            print("- manage services: [service] [action]: Manage system services (start, stop, restart, or status)")
+            print("- scan network: Scan the local network for devices")
+            print("- system monitor: Display CPU, memory, and disk usage percentages")
+            print("- update api: Add or update the OpenAI API key")
+            print("- update gpt: Update the GPT-4 model to the latest version")
+            print("- update system: Update the system to the latest version of Linux")
+
+        elif command == "exit":
+            print("Exiting GPTadmin...")
+            break
+
+        else:
+            print("Please provide a valid command")
 
 if __name__ == "__main__":
     main()
